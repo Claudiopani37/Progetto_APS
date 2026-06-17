@@ -7,7 +7,7 @@ from crypto_primitives import rsa_encrypt, hmac_sha256, sha256_hex, generate_sym
 
 
 def main():
-    print(" SIMULAZIONE REFERENDUM BINARIO Si'/No — WP4")
+    print(" SIMULAZIONE REFERENDUM BINARIO Si'/No ")
 
     print("\n[1] SETUP e PKI")
     ca = CertificationAuthority()                      # l'Universita' come CA
@@ -59,7 +59,8 @@ def main():
     print("\n[3] CHIUSURA URNE")
     ae.close_and_publish()
     print(f"Radice di Merkle pubblicata: {bb.merkle_root[:32]}...")
-    print(f"Verifica universale (root): {bb.verify_published_root(ae.public_key)}")
+    assert ca.verify_certificate(cert_ae), "Certificato AE non valido"
+    print(f"Verifica universale (root): {bb.verify_published_root(cert_ae.public_key)}")
     print(f"Contenuto pubblico del BB")
     for i, r in enumerate(bb.records):
         print(f"foglia {i}: pseudonimo={r.token[:12]}...  c(cifrato)={r.c[:24]}...")
